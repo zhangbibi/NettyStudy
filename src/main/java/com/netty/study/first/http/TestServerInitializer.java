@@ -1,4 +1,4 @@
-package com.netty.study.first;
+package com.netty.study.first.http;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

@@ -1,4 +1,4 @@
-package com.netty.study.socket;
+package com.netty.study.second.socket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

@@ -1,4 +1,4 @@
-package com.netty.study.socket;
+package com.netty.study.second.socket;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

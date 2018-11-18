@@ -1,4 +1,4 @@
-package com.netty.study.socket;
+package com.netty.study.third.chat;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -7,21 +7,21 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * Created by zhangyaping on 18/11/18.
+ * Created by zhangyaping on 18/11/19.
  */
-public class MyServer {
+public class MyChatServer {
 
     public static void main(String[] args) throws Exception {
-
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
-            bootstrap.group(bossGroup, workGroup).channel(NioServerSocketChannel.class).childHandler(new MyServerInitializer());
-            // sync表示会一直等待
+            bootstrap.group(bossGroup, workGroup).channel(NioServerSocketChannel.class)
+                    .childHandler(null);
+
             ChannelFuture channelFuture = bootstrap.bind(8899).sync();
-            channelFuture.channel().closeFuture().sync();
+            channelFuture.channel().closeFuture();
         } finally {
             bossGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
