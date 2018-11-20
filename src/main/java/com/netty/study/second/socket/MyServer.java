@@ -12,7 +12,6 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class MyServer {
 
     public static void main(String[] args) throws Exception {
-
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workGroup = new NioEventLoopGroup();
 

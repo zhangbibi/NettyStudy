@@ -41,7 +41,7 @@ public class MyChatServerHandler extends SimpleChannelInboundHandler<String> {
 
         Channel channel = ctx.channel();
         //这行代码可以不要  netty会自动remove
-        channelGroup.remove(channel);
+//        channelGroup.remove(channel);
         channelGroup.writeAndFlush("【服务器】 - " + channel.remoteAddress() + " 离开\n");
     }
 

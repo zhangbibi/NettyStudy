@@ -17,11 +17,12 @@ public class MyChatServer {
 
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
+
             bootstrap.group(bossGroup, workGroup).channel(NioServerSocketChannel.class)
-                    .childHandler(null);
+                    .childHandler(new MyChatServerInitializer());
 
             ChannelFuture channelFuture = bootstrap.bind(8899).sync();
-            channelFuture.channel().closeFuture();
+            channelFuture.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
