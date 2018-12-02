@@ -16,18 +16,22 @@
 
 package com.netty.study.eigth.grpc.mycode;
 
-import com.netty.study.eigth.grpc.proto.StudentRequest;
-import com.netty.study.eigth.grpc.proto.StudentResponseList;
-import com.netty.study.eigth.grpc.proto.StudentServiceGrpc;
+import com.netty.study.eigth.grpc.proto.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+
+import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A simple client that requests a greeting from the {@link GRpcServer}.
  */
-public class StreamReqClient {
-
+public class StreamReqResClient {
     public static void main(String[] args) throws Exception {
 
         ManagedChannel channel = ManagedChannelBuilder
@@ -37,15 +41,10 @@ public class StreamReqClient {
 
         StudentServiceGrpc.StudentServiceStub stub = StudentServiceGrpc.newStub(channel);
 
-        StreamObserver<StudentResponseList> studentResponseListStreamObserver = new StreamObserver<StudentResponseList>() {
+        StreamObserver<StreamRequest> requestStreamObserver = stub.biTalk(new StreamObserver<StreamResponse>() {
             @Override
-            public void onNext(StudentResponseList value) {
-                value.getStudentResponseList().forEach(studentResponse -> {
-                    System.out.println(studentResponse.getName());
-                    System.out.println(studentResponse.getAge());
-                    System.out.println(studentResponse.getCity());
-                    System.out.println("*************");
-                });
+            public void onNext(StreamResponse value) {
+                System.out.println(value.getResponseInfo());
             }
 
             @Override
@@ -55,18 +54,14 @@ public class StreamReqClient {
 
             @Override
             public void onCompleted() {
-
+                System.out.println("onCommpleted");
             }
-        };
+        });
 
-        StreamObserver<StudentRequest> studentRequestStreamObserver = stub.getStudentWrapperByAges(studentResponseListStreamObserver);
-        studentRequestStreamObserver.onNext(StudentRequest.newBuilder().setAge(22).build());
-        studentRequestStreamObserver.onNext(StudentRequest.newBuilder().setAge(23).build());
-        studentRequestStreamObserver.onCompleted();
-
-        //客户端以流形式发送数据时必做使用异步的stub   所以这里sleep等待结果返回
-        Thread.sleep(10000);
+        for (int i = 0; i < 10; i++) {
+            requestStreamObserver.onNext(StreamRequest.newBuilder().setRequestInfo(LocalDateTime.now().toString()).build());
+            Thread.sleep(1000);
+        }
     }
-
 
 }
