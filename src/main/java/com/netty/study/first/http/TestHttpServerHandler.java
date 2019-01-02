@@ -15,19 +15,13 @@ import java.net.URI;
 public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
-
         System.out.println(msg.getClass());
-
         System.out.println(ctx.channel().remoteAddress());
-
         Thread.sleep(8000);
-
         if (msg instanceof HttpRequest) {
             //构造一个http返回
             HttpRequest httpRequest = (HttpRequest) msg;
-
             System.out.println("method = " + httpRequest.method().name());
-
             URI uri = new URI(httpRequest.uri());
             if ("/favicon.ico".equals(uri.getPath())) {
                 System.out.println("favicon.con");
@@ -37,13 +31,10 @@ public class TestHttpServerHandler extends SimpleChannelInboundHandler<HttpObjec
             FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
             response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
             response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-
             ctx.writeAndFlush(response);
             //关闭连接
             ctx.channel().close();
         }
-
-
         //lsof -i prot
     }
 

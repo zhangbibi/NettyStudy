@@ -15,15 +15,15 @@ public class TestServer {
 
     public static void main(String[] args) throws InterruptedException {
 
-        //死循环
-
-        //boss用于获取连接  work用于处理连接
+        //事件循环组  boss用于获取连接  worker用于处理连接
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            //启动一个服务器
+            //ServerBootstrap是一个辅助类 用于简化地启动一个服务器
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+            //装配属性 handler()方法针对bossGroup的处理器 childHandler()方法是针对workerGroup的处理器
+            serverBootstrap.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
                     .childHandler(new TestServerInitializer());
 
             ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();
